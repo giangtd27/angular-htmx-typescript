@@ -1,0 +1,31 @@
+<!-- HTMX view template for delete confirmation -->
+<div class="dialog-overlay" hx-on::click="closeDialog()">
+  <div class="dialog-container" hx-on::click="event.stopPropagation()">
+    <div class="dialog-header">
+      <h2>Delete User</h2>
+    </div>
+    <div class="dialog-body">
+      <p>Are you sure you want to delete user {{ user.name }}? This action cannot be undone.</p>
+    </div>
+    <div class="dialog-footer">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        hx-get="/api/users/list"
+        hx-target="#dialog-container"
+        hx-swap="outerHTML">
+        Cancel
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-danger"
+        hx-delete="/api/users/{{ user.id }}"
+        hx-target="#users-list"
+        hx-swap="innerHTML"
+        hx-confirm="Are you sure you want to delete this user?">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,176 @@
+.users-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-primary);
+
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 18px;
+    }
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+.users-table-container {
+  background: var(--surface-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+
+  @media (max-width: 768px) {
+    border-radius: 4px;
+  }
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+
+  @media (max-width: 768px) {
+    min-width: 500px;
+  }
+
+  thead {
+    background: var(--surface-variant);
+    
+    th {
+      padding: 16px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+
+      @media (max-width: 768px) {
+        padding: 12px;
+        font-size: 13px;
+      }
+
+      @media (max-width: 480px) {
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.2s;
+
+      &:hover {
+        background: var(--surface-variant);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: 16px;
+      font-size: 14px;
+      color: var(--text-primary);
+
+      @media (max-width: 768px) {
+        padding: 12px;
+        font-size: 13px;
+      }
+
+      @media (max-width: 480px) {
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+
+  &[data-role="superadmin"] {
+    background: #ea4335;
+    color: white;
+  }
+
+  &[data-role="admin"] {
+    background: #4285f4;
+    color: white;
+  }
+
+  &[data-role="moderator"] {
+    background: #fbbc04;
+    color: #202124;
+  }
+
+  &[data-role="user"] {
+    background: var(--surface-variant);
+    color: var(--text-primary);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    gap: 4px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+
+  @media (max-width: 480px) {
+    padding: 24px;
+    font-size: 13px;
+  }
+}
+

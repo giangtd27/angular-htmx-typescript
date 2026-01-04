@@ -1,0 +1,96 @@
+<dialog #dialog class="dialog dialog-md">
+  <div class="dialog-container">
+    <div class="dialog-header">
+      <div>
+        <h2>{{ isEditMode ? 'Edit User' : 'Create User' }}</h2>
+      </div>
+      <button 
+        type="button" 
+        class="btn-close" 
+        (click)="onCancel()"
+        aria-label="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="dialog-body">
+      <form id="user-form" (ngSubmit)="onSubmit()">
+      @if (error()) {
+        <div class="error-message">
+          {{ error() }}
+        </div>
+      }
+
+      <div class="form-group">
+        <label for="name">Name *</label>
+        <input
+          type="text"
+          id="name"
+          [(ngModel)]="formData.name"
+          name="name"
+          required
+          placeholder="Enter user name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="formData.email"
+          name="email"
+          required
+          placeholder="Enter user email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select
+          id="role"
+          [(ngModel)]="formData.role"
+          name="role"
+        >
+          @for (role of roles; track role) {
+            <option [value]="role">{{ getRoleLabel(role) }}</option>
+          }
+        </select>
+      </div>
+
+      </form>
+    </div>
+    <div class="dialog-footer">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="onCancel()"
+        [disabled]="loading()">
+        Cancel
+      </button>
+      <button type="submit" form="user-form" class="btn btn-primary" [disabled]="loading()">
+        @if (loading()) {
+          <span>Saving...</span>
+        } @else {
+          <span>{{ isEditMode ? 'Update' : 'Create' }}</span>
+        }
+      </button>
+    </div>
+
+    @if (showConfirmDialog()) {
+      <app-confirmation-dialog
+        [title]="isEditMode ? 'Update User' : 'Create User'"
+        [message]="'Are you sure you want to ' + (isEditMode ? 'update' : 'create') + ' this user?'"
+        [confirmText]="isEditMode ? 'Update' : 'Create'"
+        cancelText="Cancel"
+        [type]="isEditMode ? DialogType.UPDATE : DialogType.CREATE"
+        [open]="showConfirmDialog()"
+        (confirmed)="confirmSave()"
+        (cancelled)="cancelSave()">
+      </app-confirmation-dialog>
+    }
+  </div>
+</dialog>
+

@@ -1,0 +1,57 @@
+<!-- This is the HTMX view template for users list -->
+<div class="users-table-container">
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Created At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of users; track user.id) {
+        <tr id="user-row-{{ user.id }}">
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="role-badge" [attr.data-role]="user.role">
+              {{ getRoleLabel(user.role) }}
+            </span>
+          </td>
+          <td>{{ user.createdAt | date:'short' }}</td>
+          <td class="actions">
+            <button 
+              class="btn-icon" 
+              hx-get="/api/users/{{ user.id }}/form"
+              hx-target="#dialog-container"
+              hx-swap="innerHTML"
+              title="Edit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/>
+              </svg>
+            </button>
+            <button 
+              class="btn-icon btn-icon-danger" 
+              hx-get="/api/users/{{ user.id }}/delete-confirm"
+              hx-target="#dialog-container"
+              hx-swap="innerHTML"
+              title="Delete">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="empty-state">No users found</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+

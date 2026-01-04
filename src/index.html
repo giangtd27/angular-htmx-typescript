@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Angular CMS</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+  <script>
+    // Handle select dropdown open state for icon rotation
+    (function() {
+      const processedSelects = new WeakSet()
+      
+      function setupSelectDropdown(select) {
+        if (processedSelects.has(select)) return
+        processedSelects.add(select)
+        
+        // Add mousedown listener to detect when dropdown opens
+        select.addEventListener('mousedown', function() {
+          this.classList.add('select-open')
+        })
+        
+        // Remove class when dropdown closes (blur)
+        select.addEventListener('blur', function() {
+          this.classList.remove('select-open')
+        })
+        
+        // Remove class after change (dropdown closes after selection)
+        select.addEventListener('change', function() {
+          setTimeout(() => {
+            this.classList.remove('select-open')
+          }, 100)
+        })
+        
+        // Handle keyboard navigation (Space/Enter/Arrow keys to open)
+        select.addEventListener('keydown', function(e) {
+          if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            this.classList.add('select-open')
+          }
+        })
+      }
+      
+      function setupSelectDropdowns() {
+        const selects = document.querySelectorAll('select:not([data-select-handled])')
+        selects.forEach(select => {
+          select.setAttribute('data-select-handled', 'true')
+          setupSelectDropdown(select)
+        })
+      }
+      
+      // Wait for Angular to bootstrap
+      function init() {
+        setupSelectDropdowns()
+        
+        // Re-setup when new content is added (for HTMX or dynamic content)
+        const observer = new MutationObserver(function(mutations) {
+          let shouldResetup = false
+          mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+              mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) {
+                  if (node.tagName === 'SELECT' && !node.hasAttribute('data-select-handled')) {
+                    shouldResetup = true
+                  } else if (node.querySelector && node.querySelector('select:not([data-select-handled])')) {
+                    shouldResetup = true
+                  }
+                }
+              })
+            }
+          })
+          if (shouldResetup) {
+            setupSelectDropdowns()
+          }
+        })
+        
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        })
+      }
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init)
+      } else {
+        // DOM already loaded, wait a bit for Angular
+        setTimeout(init, 100)
+      }
+    })()
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
